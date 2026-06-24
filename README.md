@@ -5,7 +5,7 @@ This folder contains a small Kubernetes environment for local experiments from W
 ## Start
 
 ```bash
-cd /home/yingtian/kube-lab
+cd ${YOUR_CLONED_PATH}/kube-lab
 ./scripts/up.sh
 ```
 
