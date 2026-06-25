@@ -49,3 +49,14 @@ kubectl -n orch-demo rollout undo deployment/web
 ./scripts/down.sh
 ```
 
+
+## Terraform IaC
+
+Terraform sample is in terraform/.
+
+    ./scripts/install-terraform.sh
+    ./scripts/iac-apply.sh
+
+If Terraform files disappeared but iac-demo still exists:
+
+    ./scripts/iac-import-existing.sh
