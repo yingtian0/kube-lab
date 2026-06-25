@@ -60,3 +60,9 @@ Terraform sample is in terraform/.
 If Terraform files disappeared but iac-demo still exists:
 
     ./scripts/iac-import-existing.sh
+
+## Overview
+
+If the whole picture is unclear, start with:
+
+    cat OVERVIEW.md
