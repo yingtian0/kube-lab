@@ -48,11 +48,4 @@ kubectl -n orch-demo rollout undo deployment/web
 ```bash
 ./scripts/down.sh
 ```
-## Practice guide
-
-If you are new to Kubernetes, start with:
-
-```bash
-cat PRACTICE.md
-```
 
