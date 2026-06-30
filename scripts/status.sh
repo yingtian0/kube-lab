@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-kubectl get nodes -o wide
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
+
+"$KUBECTL" --context "$KUBE_CONTEXT" get nodes -o wide
 echo
-kubectl -n orch-demo get deploy,rs,pod,svc,pdb -o wide
+"$KUBECTL" --context "$KUBE_CONTEXT" -n orch-demo get deploy,rs,pod,svc,pdb -o wide

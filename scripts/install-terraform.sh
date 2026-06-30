@@ -1,12 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-BIN="$ROOT/bin"
-mkdir -p "$BIN"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
 
-if [[ -x "$BIN/terraform" ]]; then
-  "$BIN/terraform" version
+require_command curl
+require_command sed
+require_command unzip
+
+mkdir -p "$BIN_DIR"
+
+if [[ -x "$TF" ]]; then
+  "$TF" version
   exit 0
 fi
 
@@ -20,10 +24,12 @@ tmpdir="$(mktemp -d)"
 trap 'rm -rf "$tmpdir"' EXIT
 
 zip="$tmpdir/terraform.zip"
-url="https://releases.hashicorp.com/terraform/${version}/terraform_${version}_linux_amd64.zip"
+os="$(detect_os)"
+arch="$(detect_arch)"
+url="https://releases.hashicorp.com/terraform/${version}/terraform_${version}_${os}_${arch}.zip"
 
 echo "Downloading Terraform ${version}"
 curl -fsSL "$url" -o "$zip"
-unzip -q "$zip" -d "$BIN"
-chmod +x "$BIN/terraform"
-"$BIN/terraform" version
+unzip -q "$zip" -d "$BIN_DIR"
+chmod +x "$TF"
+"$TF" version

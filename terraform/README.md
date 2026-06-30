@@ -12,7 +12,7 @@ Terraform creates Kubernetes objects inside that cluster
 ## Start the cluster
 
 ```bash
-cd /home/yingtian/kube-lab
+cd /path/to/kube-lab
 ./scripts/up.sh
 ```
 
@@ -25,30 +25,30 @@ cd /home/yingtian/kube-lab
 This installs Terraform into:
 
 ```text
-/home/yingtian/kube-lab/bin/terraform
+./bin/terraform
 ```
 
 ## Apply IaC
 
 ```bash
-cd /home/yingtian/kube-lab/terraform
+cd /path/to/kube-lab/terraform
 ../bin/terraform init
-../bin/terraform plan
-../bin/terraform apply
+../bin/terraform plan -var "kube_context=${KUBE_CONTEXT:-kind-local-orchestration}"
+../bin/terraform apply -var "kube_context=${KUBE_CONTEXT:-kind-local-orchestration}"
 ```
 
 ## If resources already exist but state was deleted
 
 ```bash
-cd /home/yingtian/kube-lab
+cd /path/to/kube-lab
 ./scripts/iac-import-existing.sh
 ```
 
 ## Check what Terraform manages
 
 ```bash
-kubectl -n iac-demo get all
-../bin/terraform -chdir=/home/yingtian/kube-lab/terraform state list
+kubectl --context "${KUBE_CONTEXT:-kind-local-orchestration}" -n iac-demo get all
+../bin/terraform -chdir=/path/to/kube-lab/terraform state list
 ```
 
 ## Open the app
@@ -56,7 +56,7 @@ kubectl -n iac-demo get all
 In one terminal:
 
 ```bash
-kubectl -n iac-demo port-forward svc/iac-web 18081:80
+../scripts/iac-port-forward.sh
 ```
 
 Then open:
@@ -68,13 +68,13 @@ http://localhost:18081
 ## Change the desired state
 
 ```bash
-../bin/terraform apply -var='replicas=4'
-kubectl -n iac-demo get pods
+../bin/terraform apply -var "kube_context=${KUBE_CONTEXT:-kind-local-orchestration}" -var='replicas=4'
+kubectl --context "${KUBE_CONTEXT:-kind-local-orchestration}" -n iac-demo get pods
 ```
 
 ## Destroy only Terraform-managed resources
 
 ```bash
-cd /home/yingtian/kube-lab/terraform
-../bin/terraform destroy
+cd /path/to/kube-lab
+./scripts/iac-destroy.sh
 ```

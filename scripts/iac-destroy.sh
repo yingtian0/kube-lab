@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TF="$ROOT/bin/terraform"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
+TFDIR="${TFDIR:-$ROOT/terraform}"
 
-cd "$ROOT/terraform"
-"$TF" destroy
+cd "$TFDIR"
+"$TF" destroy -var "kube_context=$KUBE_CONTEXT"

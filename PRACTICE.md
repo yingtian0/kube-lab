@@ -15,7 +15,7 @@
 ## 0. 環境の場所
 
 ```bash
-cd /home/yingtian/kube-lab
+cd /path/to/kube-lab
 ```
 
 クラスタを起動:
@@ -407,7 +407,7 @@ kubectl -n orch-demo describe svc web
 ## 14. 毎回の練習テンプレート
 
 ```bash
-cd /home/yingtian/kube-lab
+cd /path/to/kube-lab
 ./scripts/up.sh
 
 kubectl -n orch-demo get all

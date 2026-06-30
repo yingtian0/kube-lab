@@ -7,5 +7,5 @@ output "service_name" {
 }
 
 output "port_forward_command" {
-  value = "kubectl -n iac-demo port-forward svc/iac-web 18081:80"
+  value = "../scripts/iac-port-forward.sh"
 }

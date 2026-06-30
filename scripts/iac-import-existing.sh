@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TF="$ROOT/bin/terraform"
-TFDIR="$ROOT/terraform"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
+TFDIR="${TFDIR:-$ROOT/terraform}"
 
 if [[ ! -x "$TF" ]]; then
   "$ROOT/scripts/install-terraform.sh"
 fi
 
-kubectl cluster-info --context kind-local-orchestration >/dev/null
+require_command "$KUBECTL"
+"$KUBECTL" cluster-info --context "$KUBE_CONTEXT" >/dev/null
 
 cd "$TFDIR"
 "$TF" init
@@ -25,14 +25,14 @@ import_if_exists() {
   "$TF" import "$address" "$id"
 }
 
-kubectl get namespace iac-demo >/dev/null
-kubectl -n iac-demo get configmap iac-index >/dev/null
-kubectl -n iac-demo get deployment iac-web >/dev/null
-kubectl -n iac-demo get service iac-web >/dev/null
+"$KUBECTL" get namespace iac-demo >/dev/null
+"$KUBECTL" -n iac-demo get configmap iac-index >/dev/null
+"$KUBECTL" -n iac-demo get deployment iac-web >/dev/null
+"$KUBECTL" -n iac-demo get service iac-web >/dev/null
 
 import_if_exists kubernetes_namespace_v1.iac_demo iac-demo
 import_if_exists kubernetes_config_map_v1.index iac-demo/iac-index
 import_if_exists kubernetes_deployment_v1.web iac-demo/iac-web
 import_if_exists kubernetes_service_v1.web iac-demo/iac-web
 
-"$TF" plan
+"$TF" plan -var "kube_context=$KUBE_CONTEXT"

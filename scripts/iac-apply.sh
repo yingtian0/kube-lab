@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TF="$ROOT/bin/terraform"
+. "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/common.sh"
+TFDIR="${TFDIR:-$ROOT/terraform}"
 
 if [[ ! -x "$TF" ]]; then
   "$ROOT/scripts/install-terraform.sh"
 fi
 
-kubectl cluster-info --context kind-local-orchestration >/dev/null
+require_command "$KUBECTL"
+"$KUBECTL" cluster-info --context "$KUBE_CONTEXT" >/dev/null
 
-cd "$ROOT/terraform"
+cd "$TFDIR"
 "$TF" init
-"$TF" apply
+"$TF" apply -var "kube_context=$KUBE_CONTEXT"
